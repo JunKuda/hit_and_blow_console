@@ -36,6 +36,14 @@ def hit_and_blow(defense_num, attack_num):
     return hit, blow
 
 
+def com_next_number(defense_num, before_atk, before_hit, before_blow):
+    while True:
+        next_atk = random.sample([i for i in range(1, 10)], 4)
+        hit, blow = hit_and_blow(defense_num, next_atk)
+        if hit == before_hit and blow == before_blow:
+            return next_atk
+
+
 def practice_mode():
     answer = random.sample([i for i in range(1, 10)], 4)
     # print(answer)
@@ -139,6 +147,7 @@ while True:
     if game_mode == 4:
         exit()
 
+    # elseにするとなぜかうまくいかない
     if game_mode not in [1, 2, 3, 4]:
         print('Invalid mode')
         continue
