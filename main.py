@@ -38,11 +38,10 @@ def hit_and_blow(defense_num, attack_num):
     return hit, blow
 
 
-def com_think_number(candidates, before_hit, before_blow):
+def com_think_number(candidates, before_atk, before_hit, before_blow):
     next_candidates = []
     for candidate_num in candidates:
-        next_atk = random.sample([i for i in range(1, 10)], 4)
-        hit, blow = hit_and_blow(candidate_num, next_atk)
+        hit, blow = hit_and_blow(candidate_num, before_atk)
         if hit == before_hit and blow == before_blow:
             next_candidates.append(candidate_num)
 
@@ -121,13 +120,13 @@ def comcom_mode():
     print('com2:{}'.format(com2_defense))
 
     cnt = 0
-    candidates = list(itertools.permutations(range(1, 10)))
-    com1_attack = random.choice(candidates)
+    candidates = list(itertools.permutations(range(1, 10), 4))
     while True:
         cnt += 1
-        # com1_attack = random.sample([i for i in range(1, 10)], 4)
+        com1_attack = random.choice(candidates)
         print('Com1 attack!: {}'.format(com1_attack))
         com1_hit, com1_blow = hit_and_blow(com2_defense, com1_attack)
+        candidates = com_think_number(candidates, com1_attack, com1_hit, com1_blow)
         if com1_hit == 4:
             print('Com1 Win!')
             print('{} times tried'.format(cnt))
