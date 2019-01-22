@@ -1,6 +1,8 @@
 import random
+import itertools
 
 
+# 受け取った数字が重複のない４桁か？
 def number_input_check(str_input):
         try:
             num_input = list(map(int, str_input))
@@ -34,6 +36,17 @@ def hit_and_blow(defense_num, attack_num):
     print('{} BLOW!'.format(blow))
 
     return hit, blow
+
+
+def com_think_number(candidates, before_hit, before_blow):
+    next_candidates = []
+    for candidate_num in candidates:
+        next_atk = random.sample([i for i in range(1, 10)], 4)
+        hit, blow = hit_and_blow(candidate_num, next_atk)
+        if hit == before_hit and blow == before_blow:
+            next_candidates.append(candidate_num)
+
+    return next_candidates
 
 
 def com_next_number(defense_num, before_atk, before_hit, before_blow):
@@ -108,9 +121,11 @@ def comcom_mode():
     print('com2:{}'.format(com2_defense))
 
     cnt = 0
+    candidates = list(itertools.permutations(range(1, 10)))
+    com1_attack = random.choice(candidates)
     while True:
         cnt += 1
-        com1_attack = random.sample([i for i in range(1, 10)], 4)
+        # com1_attack = random.sample([i for i in range(1, 10)], 4)
         print('Com1 attack!: {}'.format(com1_attack))
         com1_hit, com1_blow = hit_and_blow(com2_defense, com1_attack)
         if com1_hit == 4:
