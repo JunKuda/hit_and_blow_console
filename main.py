@@ -3,6 +3,7 @@ import itertools
 
 
 # 受け取った数字が重複のない４桁か？
+# 不正な値ならエラーメッセージを出力してFalseを返す
 def number_input_check(str_input):
         try:
             num_input = list(map(int, str_input))
@@ -32,9 +33,6 @@ def hit_and_blow(defense_num, attack_num):
             blow += 1
         i += 1
 
-    print('{} HIT!'.format(hit))
-    print('{} BLOW!'.format(blow))
-
     return hit, blow
 
 
@@ -48,14 +46,6 @@ def com_think_number(candidates, before_atk, before_hit, before_blow):
     return next_candidates
 
 
-def com_next_number(defense_num, before_atk, before_hit, before_blow):
-    while True:
-        next_atk = random.sample([i for i in range(1, 10)], 4)
-        hit, blow = hit_and_blow(defense_num, next_atk)
-        if hit == before_hit and blow == before_blow:
-            return next_atk
-
-
 def practice_mode():
     answer = random.sample([i for i in range(1, 10)], 4)
     # print(answer)
@@ -64,13 +54,16 @@ def practice_mode():
         print('''please input 4 unique integers, or 'end':''')
         str_input = input()
         if str_input == 'end':
-            exit()
+            break
 
         if not number_input_check(str_input):
             continue
 
         num_input = map(int, str_input)
         hit, blow = hit_and_blow(answer, num_input)
+
+        print('{} HIT!'.format(hit))
+        print('{} BLOW!'.format(blow))
 
         if hit == 4:
             print('You win!')
@@ -91,8 +84,11 @@ def vscom_mode():
     enemy_defense = random.sample([i for i in range(1, 10)], 4)
     # print(enemy_defense)
     while True:
-        print('Input attack number')
+        print("Input attack number or 'end'")
         str_input = input()
+
+        if str_input == 'end':
+            break
 
         if not number_input_check(str_input):
             continue
@@ -100,6 +96,10 @@ def vscom_mode():
 
         print('Your attack!')
         user_hit, user_blow = hit_and_blow(enemy_defense, user_attack)
+
+        print('{} HIT!'.format(user_hit))
+        print('{} BLOW!'.format(user_blow))
+
         if user_hit == 4:
             print('You Win!')
             exit()
@@ -107,8 +107,11 @@ def vscom_mode():
         print('Enemy attack!')
         enemy_attack = random.sample([i for i in range(1, 10)], 4)
         print(enemy_attack)
-
         enemy_hit, enemy_blow = hit_and_blow(user_defense, enemy_attack)
+
+        print('{} hit!'.format(enemy_hit))
+        print('{} BLOW!'.format(enemy_blow))
+
         if enemy_hit == 4:
             print('You Lose...')
 
@@ -126,6 +129,10 @@ def comcom_mode():
         com1_attack = random.choice(candidates)
         print('Com1 attack!: {}'.format(com1_attack))
         com1_hit, com1_blow = hit_and_blow(com2_defense, com1_attack)
+
+        print('{} HIT!'.format(com1_hit))
+        print('{} BLOW!'.format(com1_blow))
+
         candidates = com_think_number(candidates, com1_attack, com1_hit, com1_blow)
         if com1_hit == 4:
             print('Com1 Win!')
@@ -135,6 +142,11 @@ def comcom_mode():
         com2_attack = random.sample([i for i in range(1, 10)], 4)
         print('Com2 attack!: {}'.format(com2_attack))
         com2_hit, com2_blow = hit_and_blow(com1_defense, com2_attack)
+
+        print('{} HIT!'.format(com2_hit))
+        print('{} BLOW!'.format(com2_blow))
+
+        candidates = com_think_number(candidates, com1_attack, com1_hit, com1_blow)
         if com2_hit == 4:
             print('Com2 Win!')
             print('{} times tried'.format(cnt))
